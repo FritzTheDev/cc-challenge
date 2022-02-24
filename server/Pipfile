@@ -8,8 +8,10 @@ django = "*"
 djangorestframework = "*"
 psycopg2 = "*"
 gunicorn = "*"
+dj-database-url = "*"
 
 [dev-packages]
+black = "*"
 
 [requires]
 python_version = "3.10"
