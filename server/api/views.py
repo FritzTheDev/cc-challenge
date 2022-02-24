@@ -1,11 +1,13 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from api.models import Note
+from api.serializers import NoteSerializer
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
 
-class HelloWorldView(APIView):
-    permission_classes = (IsAuthenticated,)
+class NoteList(ListCreateAPIView):
+    queryset = Note.objects.all()
+    serializer_class = NoteSerializer
 
-    def get(self, request):
-        content = {"message": "Hello, World"}
-        return Response(content)
+
+class NoteDetail(RetrieveUpdateDestroyAPIView):
+    queryset = Note.objects.all()
+    serializer_class = NoteSerializer
