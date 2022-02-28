@@ -24,7 +24,7 @@ class Template(Model):
     title = CharField(max_length=255)
     slug = CharField(max_length=255)
     markdown = CharField(max_length=20000)
-    published = BooleanField(default=False)
+    published = BooleanField(initial=False)
 
     # Template Author - Only for internal record-keeping
     author = ForeignKey(settings.AUTH_USER_MODEL, on_delete=CASCADE)
