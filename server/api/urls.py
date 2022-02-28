@@ -1,6 +1,8 @@
-from . import views
+from .views import TemplateCreate, TemplateDetail, TemplateList
 from django.urls import path
 
 urlpatterns = [
-    path("lists/", views.BuzzListIndexView.as_view(), name="Buzz List Index"),
+    path("template/", TemplateList.as_view(), name="Template Listd"),
+    path("template/create/", TemplateCreate.as_view(), name="Template Create"),
+    path("template/<int:pk>/", TemplateDetail.as_view(), name="Template Detail"),
 ]
