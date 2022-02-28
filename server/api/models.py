@@ -33,7 +33,7 @@ class Template(Model):
 
 class Vehicle(Model):
     """
-    A Vehicle make + model + other info. Used in combination with a vehicle template to generate posts
+    A vehicle with make + model + other info. Used in combination with a vehicle template to generate posts
     """
 
     # Vehicle Type Choices
