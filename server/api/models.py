@@ -1,51 +1,54 @@
+from email.policy import default
 from django.conf import settings
-from django.db.models import Model, CharField, DateTimeField, ForeignKey, CASCADE
+from django.db.models import (
+    Model,
+    CharField,
+    TextChoices,
+    DateTimeField,
+    ForeignKey,
+    CASCADE,
+)
 from django.forms import BooleanField
+from django.utils.translation import gettext_lazy as _
 
 
-class BuzzList(Model):
+class Template(Model):
     """
-    Roughly Equivalent To An "Organization".
-    - Billing takes place at this level.
-    - Each List has one Owner & 0-N Staff based on tier.
-    - Owners and staff can be associated with multiple lists.
-    - Owners have full access to their list. Each staff member has configurable access.
-    - Lists can have any number of subscribers.
-    - Lists can have sublists of subscribers.
+    Basically just a markdown document that gets combined with vehicle names to generate posts.
     """
 
     # Metadata
     created = DateTimeField(auto_now_add=True, editable=False)
     changed = DateTimeField(auto_now=True)
 
-    # Organization Name
-    name = CharField(max_length=50)
-    slug = CharField(max_length=50)
+    # Main Data
+    title = CharField(max_length=255)
+    slug = CharField(max_length=255)
+    markdown = CharField(max_length=20000)
+    published = BooleanField(default=False)
 
-    # Relationships
-    owner = ForeignKey(settings.AUTH_USER_MODEL, on_delete=CASCADE)
+    # Template Author - Only for internal record-keeping
+    author = ForeignKey(settings.AUTH_USER_MODEL, on_delete=CASCADE)
 
 
-class StaffMembership(Model):
+class Vehicle(Model):
     """
-    Staff Memberships are a membership object relating users & lists.
-    Staff Memberships include permission settings for their associated list.
-    Permissions include:
-    - View List (Read)
-    - Manage Members (Create/Update/Delete)
-    - Send Texts (Create)
-    - Manage List (Update)
+    A Vehicle make + model + other info. Used in combination with a vehicle template to generate posts
     """
 
+    # Vehicle Type Choices
+    class VehicleTypes(TextChoices):
+        CAR = ("CAR", _("Car"))
+        VAN = ("VAN", _("Van"))
+        TRUCK = ("TRU", _("Truck"))
+        SUV = ("SUV", _("SUV"))
+
+    # Metadata
     created = DateTimeField(auto_now_add=True, editable=False)
     changed = DateTimeField(auto_now=True)
 
-    # Permissions
-    view_list = BooleanField()
-    manage_members = BooleanField()
-    send_texts = BooleanField()
-    manage_list = BooleanField()
-
-    # Relationships
-    buzz_list = ForeignKey(BuzzList, on_delete=CASCADE)
-    user = ForeignKey(settings.AUTH_USER_MODEL, on_delete=CASCADE)
+    # Main Data
+    make = CharField(max_length=50)
+    model = CharField(max_length=50)
+    image_url = CharField(max_length=255)
+    type = CharField(max_length=3, choices=VehicleTypes.choices)
