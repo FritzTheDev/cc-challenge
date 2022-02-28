@@ -1,14 +1,15 @@
 from django.conf import settings
-from api.models import BuzzList
+from api.models import Template
 from rest_framework.serializers import ModelSerializer
 
 
-class BuzzListSerializer(ModelSerializer):
+class TemplateSerializer(ModelSerializer):
     class Meta:
-        model = BuzzList
-        fields = ['id', 'created', 'changed', 'name', 'slug', 'owner']
+        model = Template
+        fields = ("id", "created", "title", "slug", "markdown", "published", "author")
+
 
 class UserSerializer(ModelSerializer):
-  class Meta:
-    model = settings.AUTH_USER_MODEL
-    fields = ('username', 'email', 'id')
+    class Meta:
+        model = settings.AUTH_USER_MODEL
+        fields = ("username", "email", "id")
