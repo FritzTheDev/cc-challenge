@@ -1,19 +1,51 @@
-from .models import BuzzList
-from api.permissions import IsOwnerOrReadOnly
-from api.serializers import BuzzListSerializer
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.generics import RetrieveUpdateDestroyAPIView
+from .models import Template
+from api.serializers import TemplateSerializer
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAdminUser
+from rest_framework.generics import (
+    RetrieveUpdateDestroyAPIView,
+    CreateAPIView,
+    ListAPIView,
+)
 
 
-class BuzzListIndexView(APIView):
-    """
-    Views for creating a post
-    """
+class TemplateList(ListAPIView):
+    queryset = Template.objects.all()
+    serializer_class = TemplateSerializer
 
-    def get(self, request, format=None):
-        owned_buzz_lists = BuzzList.objects.filter(owner=request.user)
-        serializer = BuzzListSerializer(owned_buzz_lists, many=True)
-        return Response(serializer.data)
 
+class TemplateCreate(CreateAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAdminUser]
+
+    queryset = Template.objects.all()
+    serializer_class = TemplateSerializer
+
+
+class TemplateDetail(RetrieveUpdateDestroyAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAdminUser]
+
+    queryset = Template.objects.all()
+    serializer_class = TemplateSerializer
+
+
+class VehicleList(ListAPIView):
+    queryset = Template.objects.all()
+    serializer_class = TemplateSerializer
+
+
+class VehicleCreate(CreateAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAdminUser]
+
+    queryset = Template.objects.all()
+    serializer_class = TemplateSerializer
+
+
+class VehicleDetail(RetrieveUpdateDestroyAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAdminUser]
+
+    queryset = Template.objects.all()
+    serializer_class = TemplateSerializer
